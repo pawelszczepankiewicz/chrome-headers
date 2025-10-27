@@ -1,0 +1,23 @@
+# Extension package
+*.zip
+*.crx
+*.pem
+
+# macOS
+.DS_Store
+.claude
+
+# IDE
+.vscode/
+.idea/
+
+# Node modules (if you add build tools later)
+node_modules/
+package-lock.json
+
+# Temporary files
+*.tmp
+*.log
+
+DEPLOYMENT.md
+PRIVACY.md

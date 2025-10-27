@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Request Headers</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Custom Request Headers</h1>
+
+    <div class="status">
+      <label>
+        <input type="checkbox" id="enabled">
+        Enable Custom Headers
+      </label>
+    </div>
+
+    <div class="headers-list" id="headersList"></div>
+
+    <div class="add-header">
+      <h3>Add New Header</h3>
+      <input type="text" id="headerName" placeholder="Header Name (e.g., X-Version)">
+      <input type="text" id="headerValue" placeholder="Header Value (e.g., 10.0.0)">
+      <button id="addButton">Add Header</button>
+    </div>
+
+    <div class="actions">
+      <button id="saveButton" class="primary">Save Changes</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
