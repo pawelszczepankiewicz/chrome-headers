@@ -12,6 +12,8 @@
       <div class="tabs">
         <button class="tab-button active" data-tab="headers">Headers</button>
         <button class="tab-button" data-tab="seo">SEO</button>
+        <button class="tab-button" data-tab="sitemap">Sitemap</button>
+        <button class="tab-button" data-tab="pixels">Pixels</button>
       </div>
 
       <!-- Headers Tab -->
@@ -45,6 +47,28 @@
 
         <div id="seoResults" class="seo-results">
           <p class="empty">Click "Analyze Current Page" to extract SEO data</p>
+        </div>
+      </div>
+
+      <!-- Sitemap Tab -->
+      <div class="tab-content" id="sitemap-tab">
+        <div class="seo-actions">
+          <button id="checkSitemapButton" class="primary">Check Sitemap</button>
+        </div>
+
+        <div id="sitemapResults" class="seo-results">
+          <p class="empty">Click "Check Sitemap" to analyze sitemap.xml and robots.txt</p>
+        </div>
+      </div>
+
+      <!-- Pixels Tab -->
+      <div class="tab-content" id="pixels-tab">
+        <div class="seo-actions">
+          <button id="detectPixelsButton" class="primary">Detect Tracking Pixels</button>
+        </div>
+
+        <div id="pixelsResults" class="seo-results">
+          <p class="empty">Click "Detect Tracking Pixels" to find analytics and marketing tags</p>
         </div>
       </div>
     </div>
