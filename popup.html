@@ -2,31 +2,50 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Custom Request Headers</title>
+    <title>Developer Helper</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div class="container">
-      <h1>Custom Request Headers</h1>
+      <h1>Developer Helper</h1>
 
-      <div class="status">
-        <label>
-          <input type="checkbox" id="enabled" />
-          Enable Custom Headers
-        </label>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="headers">Headers</button>
+        <button class="tab-button" data-tab="seo">SEO</button>
       </div>
 
-      <div class="headers-list" id="headersList"></div>
+      <!-- Headers Tab -->
+      <div class="tab-content active" id="headers-tab">
+        <div class="status">
+          <label>
+            <input type="checkbox" id="enabled" />
+            Enable Custom Headers
+          </label>
+        </div>
 
-      <div class="add-header">
-        <h3>Add New Header</h3>
-        <input type="text" id="headerName" placeholder="Header Name" />
-        <input type="text" id="headerValue" placeholder="Header Value" />
-        <button id="addButton">Add Header</button>
+        <div class="headers-list" id="headersList"></div>
+
+        <div class="add-header">
+          <h3>Add New Header</h3>
+          <input type="text" id="headerName" placeholder="Header Name" />
+          <input type="text" id="headerValue" placeholder="Header Value" />
+          <button id="addButton">Add Header</button>
+        </div>
+
+        <div class="actions">
+          <button id="saveButton" class="primary">Save Changes</button>
+        </div>
       </div>
 
-      <div class="actions">
-        <button id="saveButton" class="primary">Save Changes</button>
+      <!-- SEO Tab -->
+      <div class="tab-content" id="seo-tab">
+        <div class="seo-actions">
+          <button id="analyzeSeoButton" class="primary">Analyze Current Page</button>
+        </div>
+
+        <div id="seoResults" class="seo-results">
+          <p class="empty">Click "Analyze Current Page" to extract SEO data</p>
+        </div>
       </div>
     </div>
 
