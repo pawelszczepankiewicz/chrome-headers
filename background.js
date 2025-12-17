@@ -31,39 +31,64 @@ async function updateHeaderRules() {
     return;
   }
 
-  // Create new rules for each header
-  const rules = [{
-    id: 1,
-    priority: 1,
-    action: {
-      type: 'modifyHeaders',
-      requestHeaders: headers.map(header => ({
-        header: header.name,
-        operation: 'set',
-        value: header.value
-      }))
-    },
-    condition: {
-      urlFilter: '*',
-      resourceTypes: [
-        'main_frame',
-        'sub_frame',
-        'stylesheet',
-        'script',
-        'image',
-        'font',
-        'object',
-        'xmlhttprequest',
-        'ping',
-        'csp_report',
-        'media',
-        'websocket',
-        'webtransport',
-        'webbundle',
-        'other'
-      ]
+  // Group headers by domain
+  const headersByDomain = {};
+  headers.forEach(header => {
+    const domain = header.domain || '__all__';
+    if (!headersByDomain[domain]) {
+      headersByDomain[domain] = [];
     }
-  }];
+    headersByDomain[domain].push(header);
+  });
+
+  const resourceTypes = [
+    'main_frame',
+    'sub_frame',
+    'stylesheet',
+    'script',
+    'image',
+    'font',
+    'object',
+    'xmlhttprequest',
+    'ping',
+    'csp_report',
+    'media',
+    'websocket',
+    'webtransport',
+    'webbundle',
+    'other'
+  ];
+
+  // Create rules for each domain group
+  const rules = [];
+  let ruleId = 1;
+
+  Object.entries(headersByDomain).forEach(([domain, domainHeaders]) => {
+    const condition = {
+      resourceTypes
+    };
+
+    if (domain === '__all__') {
+      condition.urlFilter = '*';
+    } else {
+      // Match the specific domain and its subdomains
+      condition.urlFilter = `||${domain}`;
+    }
+
+    rules.push({
+      id: ruleId++,
+      priority: domain === '__all__' ? 1 : 2, // Domain-specific rules have higher priority
+      action: {
+        type: 'modifyHeaders',
+        requestHeaders: domainHeaders.map(header => ({
+          header: header.name,
+          operation: 'set',
+          value: header.value
+        }))
+      },
+      condition
+    });
+  });
 
   // Add the rules
   await chrome.declarativeNetRequest.updateDynamicRules({

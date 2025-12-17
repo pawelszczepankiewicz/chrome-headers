@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Developer Helper</title>
+    <title>Headers - SEO - Sitemaps - Pixels</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div class="container">
-      <h1>Developer Helper</h1>
+      <h1>Headers - SEO - Sitemaps - Pixels</h1>
 
       <div class="tabs">
         <button class="tab-button active" data-tab="headers">Headers</button>
         <button class="tab-button" data-tab="seo">SEO</button>
-        <button class="tab-button" data-tab="sitemap">Sitemap</button>
+        <button class="tab-button" data-tab="sitemap">Sitemaps</button>
         <button class="tab-button" data-tab="pixels">Pixels</button>
       </div>
 
@@ -27,22 +27,36 @@
 
         <div class="headers-list" id="headersList"></div>
 
-        <div class="add-header">
-          <h3>Add New Header</h3>
+        <div class="add-header" id="headerForm">
+          <h3 id="formTitle">Add New Header</h3>
           <input type="text" id="headerName" placeholder="Header Name" />
           <input type="text" id="headerValue" placeholder="Header Value" />
-          <button id="addButton">Add Header</button>
+          <input
+            type="text"
+            id="headerDomain"
+            placeholder="Domain (optional, e.g. example.com)"
+          />
+          <div class="form-buttons">
+            <button id="addButton">Add Header</button>
+            <button
+              id="cancelEditButton"
+              class="secondary"
+              style="display: none"
+            >
+              Cancel
+            </button>
+          </div>
+          <input type="hidden" id="editIndex" value="-1" />
         </div>
 
-        <div class="actions">
-          <button id="saveButton" class="primary">Save Changes</button>
-        </div>
       </div>
 
       <!-- SEO Tab -->
       <div class="tab-content" id="seo-tab">
         <div class="seo-actions">
-          <button id="analyzeSeoButton" class="primary">Analyze Current Page</button>
+          <button id="analyzeSeoButton" class="primary">
+            Analyze Current Page
+          </button>
         </div>
 
         <div id="seoResults" class="seo-results">
@@ -57,18 +71,24 @@
         </div>
 
         <div id="sitemapResults" class="seo-results">
-          <p class="empty">Click "Check Sitemap" to analyze sitemap.xml and robots.txt</p>
+          <p class="empty">
+            Click "Check Sitemap" to analyze sitemap.xml and robots.txt
+          </p>
         </div>
       </div>
 
       <!-- Pixels Tab -->
       <div class="tab-content" id="pixels-tab">
         <div class="seo-actions">
-          <button id="detectPixelsButton" class="primary">Detect Tracking Pixels</button>
+          <button id="detectPixelsButton" class="primary">
+            Detect Tracking Pixels
+          </button>
         </div>
 
         <div id="pixelsResults" class="seo-results">
-          <p class="empty">Click "Detect Tracking Pixels" to find analytics and marketing tags</p>
+          <p class="empty">
+            Click "Detect Tracking Pixels" to find analytics and marketing tags
+          </p>
         </div>
       </div>
     </div>

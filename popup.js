@@ -45,14 +45,43 @@ function renderHeaders(headers) {
   headers.forEach((header, index) => {
     const headerDiv = document.createElement('div');
     headerDiv.className = 'header-item';
+    const domainText = header.domain ? `<span class="header-domain">${escapeHtml(header.domain)}</span>` : '<span class="header-domain all-domains">All domains</span>';
     headerDiv.innerHTML = `
       <div class="header-info">
         <span class="header-name">${escapeHtml(header.name)}:</span>
         <span class="header-value">${escapeHtml(header.value)}</span>
+        ${domainText}
       </div>
-      <button class="delete-button" data-index="${index}">Delete</button>
+      <div class="header-actions">
+        <button class="edit-button" data-index="${index}">Edit</button>
+        <button class="delete-button" data-index="${index}">Delete</button>
+      </div>
     `;
     headersList.appendChild(headerDiv);
+  });
+
+  // Add edit listeners
+  document.querySelectorAll('.edit-button').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const index = parseInt(e.target.getAttribute('data-index'));
+      const data = await chrome.storage.sync.get(['headers']);
+      const headers = data.headers || [];
+      const header = headers[index];
+
+      // Populate form with header data
+      document.getElementById('headerName').value = header.name;
+      document.getElementById('headerValue').value = header.value;
+      document.getElementById('headerDomain').value = header.domain || '';
+      document.getElementById('editIndex').value = index;
+
+      // Update form UI for edit mode
+      document.getElementById('formTitle').textContent = 'Edit Header';
+      document.getElementById('addButton').textContent = 'Update Header';
+      document.getElementById('cancelEditButton').style.display = 'block';
+
+      // Scroll to form
+      document.getElementById('headerForm').scrollIntoView({ behavior: 'smooth' });
+    });
   });
 
   // Add delete listeners
@@ -71,13 +100,28 @@ function renderHeaders(headers) {
   });
 }
 
-// Add new header
+// Reset form to add mode
+function resetForm() {
+  document.getElementById('headerName').value = '';
+  document.getElementById('headerValue').value = '';
+  document.getElementById('headerDomain').value = '';
+  document.getElementById('editIndex').value = '-1';
+  document.getElementById('formTitle').textContent = 'Add New Header';
+  document.getElementById('addButton').textContent = 'Add Header';
+  document.getElementById('cancelEditButton').style.display = 'none';
+}
+
+// Add or update header
 document.getElementById('addButton').addEventListener('click', async () => {
   const nameInput = document.getElementById('headerName');
   const valueInput = document.getElementById('headerValue');
+  const domainInput = document.getElementById('headerDomain');
+  const editIndexInput = document.getElementById('editIndex');
 
   const name = nameInput.value.trim();
   const value = valueInput.value.trim();
+  const domain = domainInput.value.trim();
+  const editIndex = parseInt(editIndexInput.value);
 
   if (!name || !value) {
     alert('Please enter both header name and value');
@@ -87,33 +131,31 @@ document.getElementById('addButton').addEventListener('click', async () => {
   const data = await chrome.storage.sync.get(['headers']);
   const headers = data.headers || [];
 
-  headers.push({ name, value });
+  const headerData = { name, value };
+  if (domain) {
+    headerData.domain = domain;
+  }
+
+  if (editIndex >= 0) {
+    // Update existing header
+    headers[editIndex] = headerData;
+  } else {
+    // Add new header
+    headers.push(headerData);
+  }
+
   await chrome.storage.sync.set({ headers });
 
-  nameInput.value = '';
-  valueInput.value = '';
-
+  resetForm();
   renderHeaders(headers);
 
   // Update background script
   chrome.runtime.sendMessage({ action: 'updateHeaders' });
 });
 
-// Save enabled state
-document.getElementById('saveButton').addEventListener('click', async () => {
-  const enabled = document.getElementById('enabled').checked;
-  await chrome.storage.sync.set({ enabled });
-
-  // Update background script
-  chrome.runtime.sendMessage({ action: 'updateHeaders' });
-
-  // Show feedback
-  const button = document.getElementById('saveButton');
-  const originalText = button.textContent;
-  button.textContent = 'Saved!';
-  setTimeout(() => {
-    button.textContent = originalText;
-  }, 1000);
+// Cancel edit
+document.getElementById('cancelEditButton').addEventListener('click', () => {
+  resetForm();
 });
 
 // Toggle enabled state

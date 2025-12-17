@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Developer Helper",
-  "version": "1.1.0",
+  "name": "Headers - SEO - Sitemaps - Pixels",
+  "version": "1.2.0",
   "description": "Add custom headers to HTTP requests and analyze SEO metadata",
   "permissions": [
     "declarativeNetRequest",
